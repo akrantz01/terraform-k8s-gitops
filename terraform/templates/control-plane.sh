@@ -51,6 +51,18 @@ sudo -u postgres createdb --owner k3s k3s
 curl -sfL https://get.k3s.io | K3S_TOKEN=${join_token} K3S_DATASTORE_ENDPOINT=postgres://k3s:$pg_k3s_password@127.0.0.1:5432/k3s?sslmode=disable sh -s - server --disable traefik --disable servicelb --disable-cloud-controller
 sleep 15
 
+# Create the DigitalOcean CCM access token secret
+mkdir -p /var/lib/rancher/k3s/server/manifests
+cat <<EOF > /var/lib/rancher/k3s/server/manifests/digitalocean-ccm-access-token.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: digitalocean
+  namespace: kube-system
+stringData:
+  access-token: ${digitalocean_access_token}
+EOF
+
 # Deploy Argo CD
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml

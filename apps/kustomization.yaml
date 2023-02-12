@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - base/cert-manager.yaml
   - base/contour.yaml
+  - base/digitalocean-ccm.yaml

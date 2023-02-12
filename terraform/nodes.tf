@@ -29,6 +29,8 @@ resource "digitalocean_droplet" "control_plane" {
     cidr       = digitalocean_vpc.vpc.ip_range
     join_token = random_password.join_token.result
 
+    cloudflare_api_token = var.cloudflare_api_token
+
     manifest_digitalocean_ccm = templatefile("${path.module}/manifests/digitalocean-ccm.yaml", {
       digitalocean_access_token = var.token
       vpc_id                    = digitalocean_vpc.vpc.id

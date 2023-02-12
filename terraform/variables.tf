@@ -14,3 +14,8 @@ variable "agent_count" {
   default     = 2
   description = "Number of agents to create"
 }
+
+variable "cloudflare_api_token" {
+  type        = string
+  description = "The Cloudflare API token for Let's Encrypt DNS challenge and External DNS"
+}

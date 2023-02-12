@@ -58,6 +58,10 @@ cat <<EOF > /var/lib/rancher/k3s/server/manifests/digitalocean-ccm.yaml
 ${manifest_digitalocean_ccm}
 EOF
 
+# Add the Cloudflare API token secret for the ClusterIssuer
+kubectl create namespace cert-manager
+kubectl create secret generic cloudflare-api-token --from-literal=api-token=${cloudflare_api_token} -n cert-manager
+
 # Deploy Argo CD
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml

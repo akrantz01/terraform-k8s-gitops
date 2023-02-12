@@ -1,4 +1,0 @@
-destinationServer: https://kubernetes.default.svc
-
-versions:
-  certManager: v1.11.0

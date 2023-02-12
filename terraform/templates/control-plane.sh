@@ -48,7 +48,7 @@ sudo -u postgres psql -c "ALTER USER k3s WITH PASSWORD '$pg_k3s_password';"
 sudo -u postgres createdb --owner k3s k3s
 
 # Install k3s
-curl -sfL https://get.k3s.io | K3S_TOKEN=${join_token} K3S_DATASTORE_ENDPOINT=postgres://k3s:$pg_k3s_password@127.0.0.1:5432/k3s?sslmode=disable sh -s - server --disable traefik
+curl -sfL https://get.k3s.io | K3S_TOKEN=${join_token} K3S_DATASTORE_ENDPOINT=postgres://k3s:$pg_k3s_password@127.0.0.1:5432/k3s?sslmode=disable sh -s - server --disable traefik --disable servicelb --disable-cloud-controller
 sleep 15
 
 # Deploy Argo CD

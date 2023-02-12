@@ -73,7 +73,9 @@ argocd app create apps \
   --dest-server https://kubernetes.default.svc \
   --repo https://github.com/akrantz01/terraform-k8s-gitops.git \
   --path apps
+
 argocd app sync apps
+argocd app sync -l app.kubernetes.io/instance=apps
 
 # Restore default namespace
 kubectl config set-context --current --namespace=default

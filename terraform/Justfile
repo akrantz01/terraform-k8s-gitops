@@ -1,0 +1,42 @@
+init:
+  terraform init
+
+plan: fmt
+  terraform plan
+
+apply: fmt
+  terraform apply
+
+destroy: fmt
+  terraform destroy
+
+fmt:
+  terraform fmt -recursive .
+
+validate: fmt
+  terraform validate .
+
+control-plane:
+  #!/usr/bin/env bash
+
+  set -e
+
+  ip=$(jq -r '.resources[] | select(.type == "digitalocean_droplet" and .name == "control_plane") | .instances | first | .attributes.ipv4_address' terraform.tfstate)
+  exec ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./key.pem root@$ip
+
+agent index:
+  #!/usr/bin/env bash
+
+  set -e
+
+  ip=$(jq -r '.resources[] | select(.type == "digitalocean_droplet" and .name == "agent") | .instances[{{index}}] | .attributes.ipv4_address' terraform.tfstate)
+  exec ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./key.pem root@$ip
+
+alias a := apply
+alias d := destroy
+alias p := plan
+alias v := validate
+alias f := fmt
+
+alias cp := control-plane
+alias ag := agent

@@ -26,11 +26,13 @@ resource "digitalocean_droplet" "control_plane" {
   tags = ["k3s", "control-plane"]
 
   user_data = templatefile("${path.module}/templates/control-plane.sh", {
-    digitalocean_access_token = var.token
-
-    cidr = digitalocean_vpc.vpc.ip_range
-
+    cidr       = digitalocean_vpc.vpc.ip_range
     join_token = random_password.join_token.result
+
+    manifest_digitalocean_ccm = templatefile("${path.module}/manifests/digitalocean-ccm.yaml", {
+      digitalocean_access_token = var.token
+      vpc_id                    = digitalocean_vpc.vpc.id
+    })
   })
 }
 

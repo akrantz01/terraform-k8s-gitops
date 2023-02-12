@@ -12,6 +12,7 @@ apt-get install -y apt-transport-https ca-certificates curl gnupg2 jq lsb-releas
 ARCH=$(dpkg --print-architecture)
 CODENAME=$(lsb_release -cs)
 PRIVATE_IP=$(curl -s http://169.254.169.254/metadata/v1/interfaces/private/0/ipv4/address)
+INSTANCE_ID=$(curl -s http://169.254.169.254/metadata/v1/id)
 
 # Setup PostgreSQL APT repository
 curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql-archive-keyring.gpg
@@ -48,19 +49,13 @@ sudo -u postgres psql -c "ALTER USER k3s WITH PASSWORD '$pg_k3s_password';"
 sudo -u postgres createdb --owner k3s k3s
 
 # Install k3s
-curl -sfL https://get.k3s.io | K3S_TOKEN=${join_token} K3S_DATASTORE_ENDPOINT=postgres://k3s:$pg_k3s_password@127.0.0.1:5432/k3s?sslmode=disable sh -s - server --disable traefik --disable servicelb --disable-cloud-controller
+curl -sfL https://get.k3s.io | K3S_TOKEN=${join_token} K3S_DATASTORE_ENDPOINT=postgres://k3s:$pg_k3s_password@127.0.0.1:5432/k3s?sslmode=disable sh -s - server --node-ip $PRIVATE_IP --disable traefik --disable servicelb --disable-cloud-controller --kubelet-arg="provider-id=digitalocean://$INSTANCE_ID" --kubelet-arg="cloud-provider=external"
 sleep 15
 
-# Create the DigitalOcean CCM access token secret
-mkdir -p /var/lib/rancher/k3s/server/manifests
-cat <<EOF > /var/lib/rancher/k3s/server/manifests/digitalocean-ccm-access-token.yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: digitalocean
-  namespace: kube-system
-stringData:
-  access-token: ${digitalocean_access_token}
+# Deploy DigitalOcean CCM
+mkdir -p /var/lib/rancher/k3s/server/manifests/
+cat <<EOF > /var/lib/rancher/k3s/server/manifests/digitalocean-ccm.yaml
+${manifest_digitalocean_ccm}
 EOF
 
 # Deploy Argo CD

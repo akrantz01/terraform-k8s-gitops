@@ -15,7 +15,7 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: contour
+  name: external-dns
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
 ---

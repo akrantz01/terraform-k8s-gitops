@@ -13,3 +13,11 @@ spec:
           port: 80
       conditions:
         - prefix: /
+    - services:
+        - name: argocd-server
+          port: 443
+          protocol: h2c
+      conditions:
+        - header:
+            name: Content-Type
+            contains: application/grpc

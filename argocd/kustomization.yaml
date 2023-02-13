@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: argocd
+
+resources:
+  - base/certificate.yaml
+  - base/rollouts-extension.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+components:
+  - https://github.com/argoproj-labs/argocd-extensions/manifests
+
+patchesStrategicMerge:
+  - overlay/argocd-cm.yaml
+  - overlay/argocd-notifications-cm.yaml
+  - overlay/argocd-server-service.yaml
+
+patchesJson6902:
+  - path: patches/argocd-server-deployment-command.yaml
+    target:
+      group: apps
+      kind: Deployment
+      name: argocd-server
+      version: v1

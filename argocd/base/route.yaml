@@ -1,0 +1,14 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+name: cd.krantz.cloud
+spec:
+  virtualhost:
+    fqdn: cd.krantz.cloud
+    tls:
+      secretName: cd-krantz-cloud-tls
+  routes:
+    - services:
+        - name: argocd-server
+          port: 80
+      conditions:
+        - prefix: /

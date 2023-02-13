@@ -5,3 +5,4 @@ resources:
   - base/argocd.yaml
   - base/cert-manager.yaml
   - base/contour.yaml
+  - base/external-dns.yaml

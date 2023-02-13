@@ -4,6 +4,7 @@ metadata:
   name: envoy
   namespace: projectcontour
   annotations:
+    kubernetes.digitalocean.com/firewall-managed: "true"
     service.beta.kubernetes.io/do-loadbalancer-protocol: "tcp"
     service.beta.kubernetes.io/do-loadbalancer-http2-ports: "80,443"
     service.beta.kubernetes.io/do-loadbalancer-http3-ports: "443"

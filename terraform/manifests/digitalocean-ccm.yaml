@@ -60,6 +60,10 @@ spec:
                 key: access-token
           - name: DO_CLUSTER_VPC_ID
             value: ${vpc_id}
+          - name: PUBLIC_ACCESS_FIREWALL_NAME
+            value: k3s-firewall
+          - name: PUBLIC_ACCESS_FIREWALL_TAGS
+            value: k3s
 ---
 apiVersion: v1
 kind: ServiceAccount

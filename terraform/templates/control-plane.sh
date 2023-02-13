@@ -88,6 +88,9 @@ argocd app create apps \
   --path apps
 
 argocd app sync apps
+
+# Ensure cert-manager, contour, and external-dns are deployed before anything else
+argocd app sync cert-manager contour external-dns
 argocd app sync -l app.kubernetes.io/instance=apps
 
 # Restore default namespace

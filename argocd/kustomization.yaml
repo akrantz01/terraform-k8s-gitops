@@ -6,6 +6,7 @@ namespace: argocd
 resources:
   - base/certificate.yaml
   - base/rollouts-extension.yaml
+  - base/route.yaml
   - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 components:

@@ -1,6 +1,7 @@
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
-name: cd.krantz.cloud
+metadata:
+  name: cd.krantz.cloud
 spec:
   virtualhost:
     fqdn: cd.krantz.cloud

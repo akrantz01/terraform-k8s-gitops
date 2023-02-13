@@ -32,6 +32,14 @@ resource "digitalocean_firewall" "control_plane" {
     source_addresses = ["0.0.0.0/0", "::/0"]
   }
 
+  # Allow traffic from the VPC to NodePorts
+  # Temporary fix until https://github.com/digitalocean/digitalocean-cloud-controller-manager/pull/588 is merged
+  inbound_rule {
+    protocol         = "tcp"
+    port_range       = "30000-32767"
+    source_addresses = [digitalocean_vpc.vpc.ip_range]
+  }
+
   dynamic "outbound_rule" {
     for_each = ["tcp", "udp"]
     content {
@@ -63,6 +71,14 @@ resource "digitalocean_firewall" "agent" {
     protocol         = "tcp"
     port_range       = "22"
     source_addresses = ["0.0.0.0/0", "::/0"]
+  }
+
+  # Allow traffic from the VPC to NodePorts
+  # Temporary fix until https://github.com/digitalocean/digitalocean-cloud-controller-manager/pull/588 is merged
+  inbound_rule {
+    protocol         = "tcp"
+    port_range       = "30000-32767"
+    source_addresses = [digitalocean_vpc.vpc.ip_range]
   }
 
   dynamic "outbound_rule" {

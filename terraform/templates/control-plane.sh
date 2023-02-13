@@ -73,11 +73,14 @@ curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/lat
 install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
 rm argocd-linux-amd64
 
+# Add kubeconfig to environment for Argo CD CLI
+echo "KUBECONFIG=/etc/rancher/k3s/k3s.yaml" >> /etc/environment
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
 # Wait for Argo CD to be ready
 until kubectl -n argocd rollout status deployment/argocd-server; do sleep 1; done
 
 # Setup Argo CD
-export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 kubectl config set-context --current --namespace=argocd
 argocd login --core
 
@@ -92,6 +95,3 @@ argocd app sync apps
 # Ensure cert-manager, contour, and external-dns are deployed before anything else
 argocd app sync cert-manager contour external-dns
 argocd app sync -l app.kubernetes.io/instance=apps
-
-# Restore default namespace
-kubectl config set-context --current --namespace=default

@@ -1,9 +1,11 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ArgoCDExtension
 metadata:
+  name: argo-rollouts
   finalizers:
   - extensions-finalizer.argocd.argoproj.io
-  name: argo-rollouts
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   sources:
   - web:

@@ -6,3 +6,4 @@ resources:
   - base/cert-manager.yaml
   - base/contour.yaml
   - base/external-dns.yaml
+  - base/governor.yaml

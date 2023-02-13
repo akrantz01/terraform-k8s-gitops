@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: governor
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: governor
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: governor
+    repoURL: https://github.com/akrantz01/terraform-k8s-gitops.git
+    targetRevision: HEAD

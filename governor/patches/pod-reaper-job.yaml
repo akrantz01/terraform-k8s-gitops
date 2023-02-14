@@ -1,2 +1,5 @@
+- op: replace
+  path: /apiVersion
+  value: batch/v1
 - op: remove
   path: /spec/backoffLimit
